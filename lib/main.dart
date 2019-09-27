@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mbom/models/user.dart';
 import 'package:mbom/screens/screen_home.dart';
-import 'package:mbom/screens/screen_profile.dart';
+import 'package:mbom/screens/screen_account.dart';
 
 void main() => runApp(MyApp());
 
@@ -114,7 +115,14 @@ class MyApp extends StatelessWidget {
       case '/':
         return _buildRoute(settings, new HomeScreen());
       case '/profile':
-        return _buildRoute(settings, new ProfileScreen());
+        return _buildRoute(
+          settings,
+          //TODO: replace String hardcoded value
+          new AccountScreen(
+            title: 'Mon Mbom',
+            user: settings.arguments as User,
+          ),
+        );
       default:
         return _buildRoute(settings, new HomeScreen());
     }

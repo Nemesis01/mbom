@@ -2,14 +2,26 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:mbom/custom/custom_bottom_navigation_bar.dart';
+import 'package:mbom/models/user.dart';
 import 'package:mbom/views/view_menu.dart';
 
 //TODO: move to bloc declaration
 const double _flingVelocity = 2.0;
+final User user = User(
+  name: 'John Doe',
+  contact: '+122233344',
+  email: 'johndoe@mbom.xyz',
+);
 
 class HomeScreen extends StatefulWidget {
   //region Members
   //final ThemeData theme;
+
+  //endregion
+
+  //region Constructor(s)
+  //HomeScreen({this.user})
   //endregion
 
   @override
@@ -87,6 +99,12 @@ class _HomeScreenState extends State<HomeScreen>
         ],
       ),
       body: _buildBody(context),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(LineIcons.search),
+        onPressed: () {},
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -134,6 +152,17 @@ class _HomeScreenState extends State<HomeScreen>
       ],
     );
   }
+
+  _buildBottomNavigationBar(BuildContext context) {
+    return BottomAppBar(
+      elevation: 32.0,
+      shape: CircularNotchedRectangle(),
+      child: CustomBottomNavigationBar(
+        items: [],
+        onTap: () {},
+      ),
+    );
+  }
   //endregion
 
   //region Other Methods
@@ -152,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _onLinkClicked() {
-    Navigator.of(context).pushNamed('/profile');
+    Navigator.of(context).pushNamed('/profile', arguments: user);
   }
   //endregion
 

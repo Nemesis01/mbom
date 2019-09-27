@@ -54,44 +54,51 @@ class MenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          height: 100.0,
-          width: double.infinity,
-          color: Theme.of(context).primaryColor,
-          padding: EdgeInsets.only(left: 48.0),
-          child: Column(
-            //mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Text(
-                'John Doe',
-                style: Theme.of(context)
-                    .textTheme
-                    .display1
-                    .copyWith(color: Colors.white),
-              ),
-              //TODO: Create String entry for below hardcoded string value
-              ListTile(
-                title: Text(
-                  'My profile',
+        InkWell(
+          onTap: onLinkClicked,
+          child: Container(
+            height: 100.0,
+            width: double.infinity,
+            color: Theme.of(context).primaryColor,
+            padding: EdgeInsets.only(left: 48.0),
+            child: Column(
+              //mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  'John Doe',
                   style: Theme.of(context)
                       .textTheme
-                      .subhead
+                      .display1
                       .copyWith(color: Colors.white),
                 ),
-                trailing: Icon(
-                  LineIcons.angle_right,
-                  size: 14.0,
-                  color: Colors.white,
+
+                //TODO: Create String entry for below hardcoded string value
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Mon profil',
+                      style: Theme.of(context)
+                          .textTheme
+                          .subhead
+                          .copyWith(color: Colors.white),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: Icon(
+                        LineIcons.angle_right,
+                        color: Colors.white,
+                        size: 16.0,
+                      ),
+                    ),
+                  ],
                 ),
-                contentPadding: EdgeInsets.only(right: 16.0),
-                isThreeLine: false,
-                dense: true,
-                enabled: true,
-                selected: true,
-                onTap: onLinkClicked,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         Expanded(
@@ -176,9 +183,27 @@ class MenuPage extends StatelessWidget {
       menus.add(_buildMenuListItem(context, menu, icons[menu.index]));
 
     // Adding Separators (spaces) between groups
-    menus.insert(4, SizedBox(height: 40.0, child: Divider()));
-    menus.insert(9, SizedBox(height: 40.0, child: Divider()));
-    menus.insert(12, SizedBox(height: 40.0, child: Divider()));
+    menus.insert(
+      4,
+      SizedBox(
+        height: 40.0,
+        child: Padding(padding: EdgeInsets.only(left: 32.0), child: Divider()),
+      ),
+    );
+    menus.insert(
+      9,
+      SizedBox(
+        height: 40.0,
+        child: Padding(padding: EdgeInsets.only(left: 32.0), child: Divider()),
+      ),
+    );
+    menus.insert(
+      12,
+      SizedBox(
+        height: 40.0,
+        child: Padding(padding: EdgeInsets.only(left: 32.0), child: Divider()),
+      ),
+    );
 
     return menus;
   }
