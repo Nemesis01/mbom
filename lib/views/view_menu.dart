@@ -8,7 +8,8 @@ enum Menu {
   Smartphones,
   Tablets,
   Accessories,
-  Account,
+  All_Categories,
+  My_mbom,
   Cart,
   Favourites,
   Wish_lists,
@@ -28,6 +29,7 @@ class MenuPage extends StatelessWidget {
     LineIcons.mobile,
     LineIcons.tablet,
     LineIcons.headphones,
+    LineIcons.list_ul,
     LineIcons.user,
     LineIcons.shopping_cart,
     LineIcons.heart_o,
@@ -52,64 +54,68 @@ class MenuPage extends StatelessWidget {
   //region UI Methods
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        InkWell(
-          onTap: onLinkClicked,
-          child: Container(
-            height: 100.0,
-            width: double.infinity,
-            color: Theme.of(context).primaryColor,
-            padding: EdgeInsets.only(left: 48.0),
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text(
-                  'John Doe',
-                  style: Theme.of(context)
-                      .textTheme
-                      .display1
-                      .copyWith(color: Colors.white),
-                ),
+    return Container(
+      //width: MediaQuery.of(context).size.width < 600 ? double.infinity : 240.0,
+      child: Column(
+        children: <Widget>[
+          InkWell(
+            onTap: onLinkClicked,
+            child: Container(
+              height: 100.0,
+              width: double.infinity,
+              color: Theme.of(context).primaryColor,
+              padding: EdgeInsets.only(left: 48.0),
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    'John Doe',
+                    style: Theme.of(context)
+                        .textTheme
+                        .display1
+                        .copyWith(color: Colors.white),
+                  ),
 
-                //TODO: Create String entry for below hardcoded string value
-                Row(
-                  children: <Widget>[
-                    Text(
-                      'Mon profil',
-                      style: Theme.of(context)
-                          .textTheme
-                          .subhead
-                          .copyWith(color: Colors.white),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: Icon(
-                        LineIcons.angle_right,
-                        color: Colors.white,
-                        size: 16.0,
+                  //TODO: Create String entry for below hardcoded string value
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'Mon profil',
+                        style: Theme.of(context)
+                            .textTheme
+                            .subhead
+                            .copyWith(color: Colors.white),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Expanded(
+                        flex: 1,
+                        child: Container(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Icon(
+                          LineIcons.angle_right,
+                          color: Colors.white,
+                          size: 16.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: CupertinoScrollbar(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 0.0, top: 32.0, right: 48.0),
-              child: ListView(children: _buildMenus(context)),
+          //SizedBox(height: 32.0),
+          Expanded(
+            child: CupertinoScrollbar(
+              child: ListView(
+                children: _buildMenus(context),
+                padding: EdgeInsets.only(top: 32.0, right: 48.0, bottom: 64.0),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -184,21 +190,21 @@ class MenuPage extends StatelessWidget {
 
     // Adding Separators (spaces) between groups
     menus.insert(
-      4,
+      5,
       SizedBox(
         height: 40.0,
         child: Padding(padding: EdgeInsets.only(left: 32.0), child: Divider()),
       ),
     );
     menus.insert(
-      9,
+      10,
       SizedBox(
         height: 40.0,
         child: Padding(padding: EdgeInsets.only(left: 32.0), child: Divider()),
       ),
     );
     menus.insert(
-      12,
+      13,
       SizedBox(
         height: 40.0,
         child: Padding(padding: EdgeInsets.only(left: 32.0), child: Divider()),
@@ -208,4 +214,8 @@ class MenuPage extends StatelessWidget {
     return menus;
   }
   //endregion
+
+  String get menuString => describeEnum(currentMenu).contains('_')
+      ? describeEnum(currentMenu).replaceFirst('_', ' ')
+      : describeEnum(currentMenu);
 }

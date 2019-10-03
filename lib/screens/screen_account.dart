@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:mbom/custom/custom_icon_card.dart';
 import 'package:mbom/models/user.dart';
 
 //TODO: Implement show/hide and animate appBar onScroll
@@ -22,8 +19,11 @@ class AccountScreen extends StatelessWidget {
         super(key: key);
   //endregion
 
+  //region UI Methods
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey();
+
     return Scaffold(
       body: _buildBody(context),
     );
@@ -102,15 +102,13 @@ class AccountScreen extends StatelessWidget {
       //top: 10.0,
       right: 16.0,
       height: 100.0,
-      child: GestureDetector(
+      child: InkWell(
         child: CircleAvatar(
           radius: 40.0,
           backgroundColor: Colors.white,
           child: Text('${user.initials}', style: TextStyle(fontSize: 24.0)),
         ),
-        onTap: () {
-          print('circle avatar tap');
-        },
+        onTap: () => _showBottomSheet(context),
       ),
     );
   }
@@ -123,22 +121,12 @@ class AccountScreen extends StatelessWidget {
       child: Material(
         elevation: 1.0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            bottomLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-            bottomRight: Radius.circular(30.0),
-          ),
+          borderRadius: BorderRadius.circular(30.0),
         ),
         child: Container(
           height: 60.0,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              bottomLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-              bottomRight: Radius.circular(30.0),
-            ),
+            borderRadius: BorderRadius.circular(30.0),
             //BorderRadius.circular(30.0),
             color: Colors.white,
           ),
@@ -193,78 +181,6 @@ class AccountScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _ordersSection(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        //TODO: Replace hardcoded string value
-        Container(
-          color: Colors.white,
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(
-                  LineIcons.calendar_minus_o,
-                  color: Colors.black,
-                  size: 28.0,
-                ),
-                title: Text(
-                  'Commandes',
-                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500),
-                ),
-              ),
-              _listTile('Historique', onTap: () {}),
-              _listTile('En attente de paiement', onTap: () {}),
-              _listTile('En cours de livraison', onTap: () {}),
-              _listTile('Retours', onTap: () {}),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _listTile(
-    String title, {
-    Widget leading,
-    Widget trailing,
-    @required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: leading == null
-          ? SizedBox(
-              width: 24.0,
-            )
-          : leading,
-      title: Text(title, style: TextStyle(fontSize: 16.0)),
-      trailing: trailing ?? Icon(LineIcons.angle_right, size: 14.0),
-      onTap: onTap,
-      dense: true,
-    );
-  }
-
-  Widget _sectionHeader(
-    String title, {
-    IconData icon,
-    Widget trailing,
-    @required VoidCallback onTap,
-  }) {
-    return Container(
-      color: Colors.white,
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: Colors.black,
-          size: 28.0,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500),
-        ),
-        onTap: onTap,
       ),
     );
   }
@@ -331,4 +247,56 @@ class AccountScreen extends StatelessWidget {
 
     return list;
   }
+
+  //endregion
+
+  //region Other Methods
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => BottomSheet(
+        onClosing: () {},
+        builder: (BuildContext context) => Container(
+          height: 160.0,
+          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(
+                  LineIcons.camera,
+                  color: Colors.deepPurple,
+                  size: 28.0,
+                ),
+                title: Text(
+                  'Prendre une photo',
+                  style: TextStyle(fontSize: 22.0),
+                ),
+                enabled: true,
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(
+                  LineIcons.photo,
+                  color: Colors.deepPurple,
+                  size: 28.0,
+                ),
+                title: Text(
+                  'Choisir depuis la bibliothèque',
+                  style: TextStyle(fontSize: 22.0),
+                ),
+              ),
+              FlatButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Annuler',
+                    style: TextStyle(fontSize: 18.0),
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  //endregion
+
 }

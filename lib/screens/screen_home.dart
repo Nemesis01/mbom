@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mbom/custom/custom_bottom_navigation_bar.dart';
 import 'package:mbom/models/user.dart';
+import 'package:mbom/pages/page_home.dart';
 import 'package:mbom/views/view_menu.dart';
 
 //TODO: move to bloc declaration
@@ -33,7 +34,10 @@ class _HomeScreenState extends State<HomeScreen>
   //region fields
   AnimationController controller;
   Menu currentMenu = Menu.Home;
+  int currentIndex = 0;
   String title;
+
+  //final mediaQuery = MediaQuery.of(context);
   //endregion
 
   //region Getters and Setters
@@ -68,43 +72,50 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     final ThemeData _theme = Theme.of(context);
 
+    //double width = mediaQuery.size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: Padding(
-          padding: EdgeInsets.only(left: 0.0),
-          child: IconButton(
-            icon: AnimatedIcon(
-              icon: AnimatedIcons.close_menu,
-              progress: controller.view,
-            ),
-            onPressed: _toggleBackdropLayerVisibility,
-          ),
-        ),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 0.0),
-          child: Text(title),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(LineIcons.filter),
-            iconSize: 28.0,
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(LineIcons.shopping_cart),
-            iconSize: 28.0,
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(context),
       body: _buildBody(context),
       bottomNavigationBar: _buildBottomNavigationBar(context),
       floatingActionButton: FloatingActionButton(
+        elevation: 4.0,
         child: Icon(LineIcons.search),
         onPressed: () {},
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return AppBar(
+      elevation: 0.0,
+      leading: Padding(
+        padding: EdgeInsets.only(left: 0.0),
+        child: IconButton(
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.close_menu,
+            progress: controller.view,
+          ),
+          onPressed: _toggleBackdropLayerVisibility,
+        ),
+      ),
+      title: Padding(
+        padding: const EdgeInsets.only(left: 0.0),
+        child: Text(title),
+      ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(LineIcons.filter),
+          iconSize: 28.0,
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(LineIcons.shopping_cart),
+          iconSize: 28.0,
+          onPressed: () {},
+        ),
+      ],
     );
   }
 
@@ -119,47 +130,87 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
-    //TODO: replace hardcoded double value by appBarHeight
+    final mediaQuery = MediaQuery.of(context);
+    double width = mediaQuery.size.width;
+
+    //TODO: replace hardcoded double value 54.0 by appBarHeight
     final Size layerSize = constraints.biggest;
     final double layerTop = layerSize.height - 54.0;
 
-    Animation<RelativeRect> layerAnimation = RelativeRectTween(
-      begin: RelativeRect.fromLTRB(
-          0.0, layerTop, 0.0, layerTop - layerSize.height),
-      end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0),
-    ).animate(controller.view);
+    Animation<RelativeRect> layerAnimation = width < 600
+        ? RelativeRectTween(
+            begin: RelativeRect.fromLTRB(
+                0.0, layerTop, 0.0, layerTop - layerSize.height),
+            end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, -54.0),
+          ).animate(controller.view)
+        : RelativeRectTween(
+            begin: RelativeRect.fromLTRB(
+                200.0, layerTop + 54.0, 0.0, layerTop - layerSize.height),
+            end: RelativeRect.fromLTRB(360.0, 0.0, 0.0, 0.0),
+          ).animate(controller.view);
 
-    return Stack(
-      children: <Widget>[
-        ExcludeSemantics(
-          child: MenuPage(
-            currentMenu: currentMenu,
-            onMenuSelected: (menu) => _onMenuSelected(menu),
-            onLinkClicked: _onLinkClicked,
-          ),
-          excluding: _isFrontLayerVisible,
-        ),
-        PositionedTransition(
-          rect: layerAnimation,
-          child: _FrontLayer(
-            isVisible: !_isFrontLayerVisible,
-            onTap: _toggleBackdropLayerVisibility,
-            child: Container(
-              child: Center(child: Text('Main Content')),
-            ),
-          ),
-        ),
-      ],
-    );
+    return width < 600
+        ? Stack(
+            children: <Widget>[
+              ExcludeSemantics(
+                child: MenuPage(
+                  currentMenu: currentMenu,
+                  onMenuSelected: (menu) => _onMenuSelected(menu),
+                  onLinkClicked: _onLinkClicked,
+                ),
+                excluding: _isFrontLayerVisible,
+              ),
+              PositionedTransition(
+                rect: layerAnimation,
+                child: _FrontLayer(
+                  isVisible: !_isFrontLayerVisible,
+                  onTap: _toggleBackdropLayerVisibility,
+                  child: HomePage(),
+                ),
+              ),
+            ],
+          )
+        : Stack(
+            children: <Widget>[
+              ExcludeSemantics(
+                child: Container(
+                  width: 360.0,
+                  child: MenuPage(
+                    currentMenu: currentMenu,
+                    onMenuSelected: (menu) => _onMenuSelected(menu),
+                    onLinkClicked: _onLinkClicked,
+                  ),
+                ),
+                excluding: _isFrontLayerVisible,
+              ),
+              PositionedTransition(
+                rect: layerAnimation,
+                child: _FrontLayer(
+                  isVisible: !_isFrontLayerVisible,
+                  onTap: _toggleBackdropLayerVisibility,
+                  child: HomePage(),
+                ),
+              ),
+            ],
+          );
   }
+
+  //TODO: implements bottomNavigationBar animation in order to hide her when the the menu layer is visible
 
   _buildBottomNavigationBar(BuildContext context) {
     return BottomAppBar(
-      elevation: 32.0,
+      elevation: 16.0,
       shape: CircularNotchedRectangle(),
       child: CustomBottomNavigationBar(
-        items: [],
-        onTap: () {},
+        currentIndex: currentIndex,
+        items: [
+          CustomBottomNavigationBarItem(icon: LineIcons.home),
+          CustomBottomNavigationBarItem(icon: LineIcons.envelope_o),
+          CustomBottomNavigationBarItem(icon: LineIcons.shopping_cart),
+          CustomBottomNavigationBarItem(icon: LineIcons.user),
+        ],
+        //TODO: Move handleTap method to bloc declaration
+        onTap: (index) => _onBottomNavItemTap(index),
       ),
     );
   }
@@ -171,13 +222,24 @@ class _HomeScreenState extends State<HomeScreen>
         velocity: _isFrontLayerVisible ? -_flingVelocity : _flingVelocity);
   }
 
+  void _toggleBottomAppBarVisibilty() {}
+
   void _onMenuSelected(Menu menu) {
     setState(() {
       currentMenu = menu;
-      title = describeEnum(menu);
+      title = describeEnum(menu).contains('_')
+          ? describeEnum(menu).replaceFirst('_', ' ')
+          : describeEnum(menu);
     });
 
     _toggleBackdropLayerVisibility();
+  }
+
+  void _onBottomNavItemTap(int index) {
+    setState(() {
+      currentIndex = index;
+      print('Current Bottom Navigation Bar Index : $currentIndex');
+    });
   }
 
   void _onLinkClicked() {

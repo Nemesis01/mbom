@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:mbom/models/user.dart';
 import 'package:mbom/screens/screen_home.dart';
 import 'package:mbom/screens/screen_account.dart';
+import 'package:mbom/screens/screen_register.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,10 +33,11 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
 
-        fontFamily: 'Dosis',
+        //fontFamily: 'Dosis'
+        fontFamily: 'EncodeSans',
         primarySwatch: Colors.deepPurple,
         primaryColor: Colors.deepPurple,
-        accentColor: Colors.white,
+        accentColor: Colors.deepPurpleAccent.shade200,
         textTheme: TextTheme(
           display4: TextStyle(
             fontWeight: FontWeight.w300,
@@ -103,8 +105,11 @@ class MyApp extends StatelessWidget {
             letterSpacing: 1.50,
           ),
         ),
+        iconTheme: IconThemeData(color: Colors.deepPurple, size: 28.0),
+        buttonTheme: ButtonThemeData(),
+        //canvasColor: Colors.deepPurple,
       ),
-      home: HomeScreen(),
+      home: RegisterScreen(),
       onGenerateRoute: _getRoute,
     );
   }
