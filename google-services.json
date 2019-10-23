@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "908790280494",
+    "firebase_url": "https://mbom-457c6.firebaseio.com",
+    "project_id": "mbom-457c6",
+    "storage_bucket": "mbom-457c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908790280494:android:bc3ab99f82e3bb248a8abf",
+        "android_client_info": {
+          "package_name": "com.ncode.mbom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908790280494-5qfjvtkeqaob3kc56143a019c6fgug5b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeJbfhvtf1SEefZA3Uif9j5BMrURuI1fc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908790280494-5qfjvtkeqaob3kc56143a019c6fgug5b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "908790280494-qkoieltuqasjplhe7eggnhul3vcf2poa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ncode.mbom"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

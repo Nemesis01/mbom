@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:mbom/models/user.dart';
 import 'package:mbom/screens/screen_home.dart';
 import 'package:mbom/screens/screen_account.dart';
+import 'package:mbom/screens/screen_profile.dart';
 import 'package:mbom/screens/screen_register.dart';
 
 void main() => runApp(MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
     );*/
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Mbom',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
@@ -36,8 +37,14 @@ class MyApp extends StatelessWidget {
         //fontFamily: 'Dosis'
         fontFamily: 'EncodeSans',
         primarySwatch: Colors.deepPurple,
-        primaryColor: Colors.deepPurple,
-        accentColor: Colors.deepPurpleAccent.shade200,
+        primaryColor: Color.fromARGB(255, 131, 43, 126),
+        //primaryColor: Colors.white,
+        accentColor: Color.fromARGB(255, 131, 43, 126),
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+        ),
         textTheme: TextTheme(
           display4: TextStyle(
             fontWeight: FontWeight.w300,
@@ -105,11 +112,20 @@ class MyApp extends StatelessWidget {
             letterSpacing: 1.50,
           ),
         ),
-        iconTheme: IconThemeData(color: Colors.deepPurple, size: 28.0),
-        buttonTheme: ButtonThemeData(),
-        //canvasColor: Colors.deepPurple,
+        iconTheme: IconThemeData(
+          size: 28.0,
+          //color: Colors.deepPurple,
+          color: Theme.of(context).primaryColor,
+        ),
+        buttonTheme: ButtonThemeData(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          textTheme: ButtonTextTheme.primary,
+        ),
+        //scaffoldBackgroundColor: Colors.deepPurple.shade100,
+        // canvasColor: Colors.white70,
       ),
-      home: RegisterScreen(),
+      home: HomeScreen(),
       onGenerateRoute: _getRoute,
     );
   }
@@ -118,14 +134,25 @@ class MyApp extends StatelessWidget {
   Route _getRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return _buildRoute(settings, new HomeScreen());
+        return _buildRoute(
+          settings,
+          new HomeScreen(),
+        );
       case '/profile':
+        return _buildRoute(
+          settings,
+          new ProfileScreen(
+            title: 'Mon profil',
+            //user: settings as User,
+          ),
+        );
+      case '/account':
         return _buildRoute(
           settings,
           //TODO: replace String hardcoded value
           new AccountScreen(
             title: 'Mon Mbom',
-            user: settings.arguments as User,
+            //user: settings.arguments as User,
           ),
         );
       default:

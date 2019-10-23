@@ -30,11 +30,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 16.0,
-      color: Colors.white,
+      //elevation: 16.0,
+      color: Colors.transparent,
       child: Container(
         height: 50.0,
-        color: Colors.deepPurple.withOpacity(0.24),
+        //color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: buildItems(context),

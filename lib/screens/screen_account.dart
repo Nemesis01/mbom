@@ -15,7 +15,7 @@ class AccountScreen extends StatelessWidget {
     Key key,
     this.title,
     this.user,
-  })  : assert(user != null),
+  }) : //assert(user != null),
         super(key: key);
   //endregion
 
@@ -66,6 +66,8 @@ class AccountScreen extends StatelessWidget {
   }
 
   Widget _header(BuildContext context) {
+    User _user = User(name: 'Calamity Jane', email: 'calamity.jane@western.us');
+
     ThemeData theme = Theme.of(context);
     return Container(
       height: 150.0,
@@ -83,11 +85,11 @@ class AccountScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(
-              '${user.name}',
+              '${_user.name}',
               style: theme.textTheme.display1.copyWith(color: Colors.white),
             ),
             Text(
-              '${user.email}',
+              '${_user.email}',
               style: theme.textTheme.subhead.copyWith(color: Colors.white),
             ),
           ],
@@ -97,6 +99,8 @@ class AccountScreen extends StatelessWidget {
   }
 
   Widget _avatar(BuildContext context) {
+    User _user = User(name: 'Calamity Jane', email: 'calamity.jane@western.us');
+
     return Positioned(
       //TODO: replace hardcoded value
       //top: 10.0,
@@ -106,7 +110,7 @@ class AccountScreen extends StatelessWidget {
         child: CircleAvatar(
           radius: 40.0,
           backgroundColor: Colors.white,
-          child: Text('${user.initials}', style: TextStyle(fontSize: 24.0)),
+          child: Text('${_user.initials}', style: TextStyle(fontSize: 24.0)),
         ),
         onTap: () => _showBottomSheet(context),
       ),

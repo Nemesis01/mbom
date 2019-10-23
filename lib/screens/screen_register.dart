@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mbom/custom/custom_text_field.dart';
+import 'package:mbom/models/user.dart';
 
 class RegisterScreen extends StatelessWidget {
+  TextEditingController nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -15,6 +18,7 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
+  //region UI
   Widget _buildBody(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
 
@@ -35,18 +39,24 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ],
             )
-          : Stack(
-              children: [
-                Row(
-                  children: <Widget>[
-                    Flexible(child: _buildLogoAndAppName(context)),
-                    Flexible(
-                        //flex: 2,
-                        child: Container(
-                            height: double.infinity,
-                            color: Colors.deepPurpleAccent,
-                            child: _buildForm(context))),
-                  ],
+          : Row(
+              children: <Widget>[
+                Flexible(flex: 2, child: _buildLogoAndAppName(context)),
+                Flexible(
+                  child: SizedBox(
+                    height: 400.0,
+                    width: 1.0,
+                    child: Container(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 3,
+                  child: Container(
+                    //width: 400,
+                    child: _buildForm(context),
+                  ),
                 ),
               ],
             ),
@@ -91,20 +101,44 @@ class RegisterScreen extends StatelessWidget {
     MediaQueryData media = MediaQuery.of(context);
 
     double width = media.size.width;
-    double horizontalPadding = width * 0.12;
+    double horizontalPadding = width * 0.1;
 
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       shrinkWrap: true,
       children: <Widget>[
-        CustomTextField(hintText: 'Votre nom...', label: 'Nom complet'),
         CustomTextField(
-            hintText: 'Entrer votre mot de passe ici', label: 'mot de passe'),
+            controller: nameController,
+            hintText: 'Entrer votre nom ici',
+            label: 'Nom complet'),
+        CustomTextField(
+          hintText: 'Entrer votre adresse électronique',
+          label: 'Adresse électronique',
+        ),
+        CustomTextField(
+          type: TextFieldType.PASSWORD,
+          hintText: 'Entrer votre mot de passe ici',
+          label: 'mot de passe',
+        ),
+        CustomTextField(
+          type: TextFieldType.PASSWORD,
+          hintText: 'Confirmer votre mot de passe',
+          label: 'confirmation',
+        ),
         RaisedButton(
-          onPressed: () {},
+          onPressed: () => _register(context),
           child: Text('Register'),
         ),
       ],
+    );
+  }
+  //endregion
+
+  void _register(BuildContext context) {
+    print('registering......');
+    Navigator.of(context).pushNamed(
+      '/profile',
+      arguments: User(name: 'Calamity Jane', email: 'sahlbr@habsj.cn'),
     );
   }
 }

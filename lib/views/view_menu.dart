@@ -18,9 +18,12 @@ enum Menu {
   Exit
 }
 
+enum MenuPageType { Extended, Modal }
+
 class MenuPage extends StatelessWidget {
   //region members
   //final User user;
+  final MenuPageType type;
   final Menu currentMenu;
   final ValueChanged<Menu> onMenuSelected;
   final VoidCallback onLinkClicked;
@@ -43,6 +46,7 @@ class MenuPage extends StatelessWidget {
   //region Constructor(s)
   MenuPage({
     Key key,
+    this.type = MenuPageType.Modal,
     @required this.currentMenu,
     @required this.onMenuSelected,
     @required this.onLinkClicked,
@@ -54,136 +58,195 @@ class MenuPage extends StatelessWidget {
   //region UI Methods
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //width: MediaQuery.of(context).size.width < 600 ? double.infinity : 240.0,
-      child: Column(
-        children: <Widget>[
-          InkWell(
-            onTap: onLinkClicked,
-            child: Container(
-              height: 100.0,
-              width: double.infinity,
-              color: Theme.of(context).primaryColor,
-              padding: EdgeInsets.only(left: 48.0),
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Text(
-                    'John Doe',
-                    style: Theme.of(context)
-                        .textTheme
-                        .display1
-                        .copyWith(color: Colors.white),
-                  ),
+    final headerHeight = type == MenuPageType.Modal ? 100.0 : 120.0;
+    final paddingLeft = type == MenuPageType.Modal ? 32.0 : 16.0;
 
-                  //TODO: Create String entry for below hardcoded string value
-                  Row(
+    return Stack(children: <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).accentColor.withOpacity(0.12),
+          /* gradient: LinearGradient(
+            begin: Alignment.center,
+            end: Alignment.bottomCenter,
+            colors: [Colors.deepPurple.withOpacity(0.12), Colors.white],
+            tileMode: TileMode.clamp,
+          ),*/
+        ),
+
+        //width: MediaQuery.of(context).size.width < 600 ? double.infinity : 240.0,
+        child: Column(
+          children: <Widget>[
+            Material(
+              child: InkWell(
+                onTap: onLinkClicked,
+                //TODO: create a Widget returning function called _header to handle that container
+                child: Container(
+                  //TODO: create an entry in dimens file for hardcoded double values
+                  height: headerHeight,
+                  width: double.infinity,
+                  color: Colors.grey.shade50,
+                  //color: Theme.of(context).accentColor.withOpacity(0.12),
+                  padding: EdgeInsets.only(left: paddingLeft),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Text(
-                        'Mon profil',
+                        'Calamity Jane',
                         style: Theme.of(context)
                             .textTheme
-                            .subhead
-                            .copyWith(color: Colors.white),
+                            .display1
+                            .copyWith(color: Colors.deepPurple),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
-                        child: Icon(
-                          LineIcons.angle_right,
-                          color: Colors.white,
-                          size: 16.0,
-                        ),
+
+                      //TODO: Create String entry for below hardcoded string value
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            'Mon profil',
+                            style:
+                                Theme.of(context).textTheme.subhead.copyWith(),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Icon(
+                              LineIcons.angle_right,
+                              //color: Colors.white,
+                              size: 16.0,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-          //SizedBox(height: 32.0),
-          Expanded(
-            child: CupertinoScrollbar(
-              child: ListView(
-                children: _buildMenus(context),
-                padding: EdgeInsets.only(top: 32.0, right: 48.0, bottom: 64.0),
-              ),
+            //SizedBox(height: 32.0),
+            Expanded(
+              child: type == MenuPageType.Modal
+                  ? CupertinoScrollbar(
+                      child: Container(
+                        //padding: EdgeInsets.only(top: 32.0),
+                        color: Colors.white,
+                        child: ListView(
+                          children: _buildMenus(context),
+                          padding: EdgeInsets.only(
+                              top: 16.0, right: 32.0, bottom: 64.0),
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(top: 16.0),
+                      child: Column(
+                        children: _buildMenus(context),
+                      ),
+                    ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    );
+      Positioned(
+        bottom: 0.0,
+        left: 0.0,
+        right: 0.0,
+        child: Visibility(
+          visible: type == MenuPageType.Extended ? true : false,
+          child: Container(
+            color: Colors.deepPurple,
+            height: 52.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                IconButton(
+                  padding: EdgeInsets.all(0.0),
+                  icon: Icon(
+                    LineIcons.envelope_o,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
+                  //TODO: Hardcoded String value
+                  tooltip: 'Inbox',
+                ),
+                IconButton(
+                  icon: Icon(LineIcons.cog),
+                  onPressed: () {}, //TODO: Hardcoded String value
+                  tooltip: 'Inbox',
+                ),
+                IconButton(
+                  icon: Icon(LineIcons.sign_out),
+                  onPressed: () {}, //TODO: Hardcoded String value
+                  tooltip: 'Inbox',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ]);
   }
 
   Widget _buildMenuListItem(BuildContext context, Menu menu, IconData icon) {
+    final iconSize = type == MenuPageType.Modal ? 28.0 : 22.0;
+    final paddingLeft = type == MenuPageType.Modal ? 48.0 : 16.0;
+    final height = type == MenuPageType.Modal ? 48.0 : 36.0;
+    final fontSize = type == MenuPageType.Modal ? 18.0 : 16.0;
+    final textStyle = Theme.of(context).textTheme.body2.copyWith(
+          fontSize: fontSize,
+          color: menu == currentMenu
+              ? Theme.of(context).accentColor
+              : Colors.black,
+          //fontWeight: FontWeight.w500,
+        );
+
     final String menuString = describeEnum(menu).contains('_')
         ? describeEnum(menu).replaceFirst('_', ' ')
         : describeEnum(menu);
 
-    return menu == currentMenu
-        ? Container(
-            height: 48.0,
-            padding: EdgeInsets.only(left: 32.0),
-            decoration: BoxDecoration(
-              color: Colors.deepPurple.withOpacity(0.12),
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(30.0),
-                bottomRight: Radius.circular(30.0),
+    return Material(
+      color: menu == currentMenu
+          ? Theme.of(context).accentColor.withOpacity(0.24)
+          : Colors.transparent,
+      borderRadius: BorderRadius.only(
+        topRight: Radius.circular(30.0),
+        bottomRight: Radius.circular(30.0),
+      ),
+      child: InkWell(
+        child: Container(
+          margin: EdgeInsets.only(right: paddingLeft),
+          height: height,
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: paddingLeft + 8.0, right: 32.0),
+                child: Icon(
+                  icon,
+                  //color: Theme.of(context).primaryColor,
+                  size: iconSize,
+                ),
               ),
-            ),
-            child: ListTile(
-              leading: Icon(
-                icon,
-                size: 28.0,
-                color: Colors.deepPurple,
-              ),
-              title: Text(
-                menuString,
-                style: Theme.of(context).textTheme.body2.copyWith(
-                      fontSize: 18.0,
-                      color: Theme.of(context).primaryColor,
-                    ),
-              ),
-              isThreeLine: false,
-              dense: true,
-              contentPadding: EdgeInsets.only(left: 0.0),
-              selected: true,
-              enabled: true,
-              onTap: () => onMenuSelected,
-            ),
-          )
-        : Container(
-            height: 48.0,
-            padding: EdgeInsets.only(left: 32.0),
-            decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(8.0)),
-            child: ListTile(
-              leading: Icon(
-                icon,
-                size: 28.0,
-                color: Colors.deepPurple,
-              ),
-              title: Text(
-                menuString,
-                style:
-                    Theme.of(context).textTheme.body2.copyWith(fontSize: 18.0),
-              ),
-              isThreeLine: false,
-              dense: true,
-              contentPadding: EdgeInsets.only(left: 0.0),
-              enabled: true,
-              selected: false,
-              onTap: () => onMenuSelected(menu),
-            ),
-          );
+              Text(menuString, style: textStyle),
+            ],
+          ),
+        ),
+        onTap: () => onMenuSelected(menu),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(30.0),
+          bottomRight: Radius.circular(30.0),
+        ),
+        //hoverColor: Colors.deepPurple.shade50,
+        onHover: (isHover) {},
+      ),
+    );
   }
 
   List<Widget> _buildMenus(BuildContext context) {
+    final separatorHeight = type == MenuPageType.Modal ? 40.0 : 24.0;
+
     List<Widget> menus = [];
     for (var menu in Menu.values)
       menus.add(_buildMenuListItem(context, menu, icons[menu.index]));
@@ -192,22 +255,23 @@ class MenuPage extends StatelessWidget {
     menus.insert(
       5,
       SizedBox(
-        height: 40.0,
+        //TODO: hardcoded double values
+        height: separatorHeight,
         child: Padding(padding: EdgeInsets.only(left: 32.0), child: Divider()),
       ),
     );
     menus.insert(
       10,
       SizedBox(
-        height: 40.0,
+        height: separatorHeight,
         child: Padding(padding: EdgeInsets.only(left: 32.0), child: Divider()),
       ),
     );
     menus.insert(
       13,
       SizedBox(
-        height: 40.0,
-        child: Padding(padding: EdgeInsets.only(left: 32.0), child: Divider()),
+        height: separatorHeight,
+        child: Padding(padding: EdgeInsets.only(left: 16.0), child: Divider()),
       ),
     );
 
