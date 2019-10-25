@@ -1,0 +1,22 @@
+[
+	{
+
+		"name" : "Electronics",
+		"description" : "Smatphones, Tablets, laptop, etc... ",
+		"subCategories" : [
+			{
+
+				"name" : "Smartphones",
+				"description" : "Brand new unlocked phones and certified reconditionned phones",
+				"subCategories" : []
+			},
+			{
+
+				"name" : "Tablets",
+				"description" : "Brand new tablets, convertibles, iPad and android tablets",
+				"subCategories" : []
+			}
+		]
+	}
+]
+	
